@@ -22,7 +22,6 @@ public class Apicontroller {
 
 
     @GetMapping("/etudiant/all")
-
     public List<Etudiant> getAllEtudiant() {
         return etudiantRep.findAll();
     }
@@ -34,9 +33,25 @@ public class Apicontroller {
 
     @PostMapping("/etudiant")
     public Etudiant createEtudiant(@RequestBody Etudiant etudiant,@RequestParam("idf") Long idFormation) {
-
         etudiant.setFormation(formationRep.findById(idFormation).get());
         return etudiantRep.save(etudiant);
+    }
+    @PutMapping("/etudiant/{id}")
+    public Etudiant updateEtudiant(@PathVariable(value="id") Long etudiantId, @RequestBody Etudiant etudiant)
+    {
+        if( etudiantRep.findById(etudiantId).isPresent())
+        {
+            etudiant.setIdEtudiant(etudiantId);
+            return etudiantRep.save(etudiant);
+        }
+        return null;
+    }
+
+    @DeleteMapping("/etudiant/{id}")
+    public void deleteEtudiant(@PathVariable(value="id") Long etudiantId)
+    {
+        if( etudiantRep.findById(etudiantId).isPresent())
+            etudiantRep.deleteById(etudiantId);
     }
 
 
